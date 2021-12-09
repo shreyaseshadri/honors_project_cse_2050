@@ -1,0 +1,78 @@
+import random
+import names
+n = 16
+class Contestant: 
+    def __init__ (self, num, name = None): 
+        self._name = name
+        self._num = num
+    
+    def __repr__(self): 
+        return self._name
+    
+class ContestantSet: 
+    def __init__(self): 
+        self._l = []
+        self._len = 0
+        self._pairs = []
+    
+    def __contains__(self, name): 
+        for contestant in self._l: 
+            if contestant._name == name: 
+                return True
+        return False
+    
+    def __repr__(self): 
+        l = []
+        for person in self._l: 
+            l.append(repr(person))
+        return str(l)
+    
+    def add(self, num, name):        
+        self._l.append(Contestant(num, name))
+        self._len += 1
+    
+    def __len__(self): 
+        return self._len
+    
+    def create_pairs(self): 
+        nums = [i for i in range(n)]
+        random.shuffle(nums)
+        
+        for i in range(0, len(nums), 2): 
+            first_person = self._l[nums[i]]._name
+            second_person = self._l[nums[i+1]]._name
+
+            pair = (first_person, second_person)
+            self._pairs.append(pair)
+        
+        return self._pairs
+
+if __name__ == '__main__': 
+    #user inputs 16 names, contestents get created and added to contestent set
+    #input_string = input("Enter contestent names separated by comma:\n")
+    #input_names  = input_string.split(",")
+
+    #or create random names for the purpose of testing
+    import names
+    people = ContestantSet()
+    assert len(people) == 0
+
+    #create list of names and add contestents to set
+    contestant_names = []
+    for i in range(16): 
+        name = names.get_first_name()
+        contestant_names.append(name)
+        people.add(i, name)
+    assert len(people) == 16
+    for i in range(16): 
+        assert contestant_names[i] in people
+    
+    #create the random pairings
+    pairs = people.create_pairs()
+    assert len(pairs) == 8
+
+    
+
+        
+
+        
